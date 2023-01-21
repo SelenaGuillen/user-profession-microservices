@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,5 +40,21 @@ public class MainController {
 
     }
 
+    @GetMapping("/users/profession/{profession}")
+    public List<User> getByProfession(@PathVariable("profession") String profession) {
+        List<User> users = userRepository.findByProfession(profession);
+        return users;
+    }
 
+    @GetMapping("/users/date/{start}/{end}")
+    public List<User> getByDateRange(@PathVariable("start") Date start, @PathVariable("end") Date end) {
+        List<User> users = userRepository.findByDateRange(start, end);
+        return users;
+    }
+
+    @GetMapping("/users/country/{country}")
+    public List<User> getByCountry(@PathVariable("country") String country) {
+        List<User> users = userRepository.findByCountry(country);
+        return users;
+    }
 }
