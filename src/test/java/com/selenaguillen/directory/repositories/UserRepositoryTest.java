@@ -32,6 +32,6 @@ class UserRepositoryTest {
 
         User actualUser = userRepository.findById(222).get();
 
-        assertEquals(expectedUser, actualUser);
+        assertEquals(expectedUser, actualUser, "The expected user does not have matching fields.");
     }
 }

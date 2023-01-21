@@ -3,7 +3,6 @@ package com.selenaguillen.directory.controller;
 import com.selenaguillen.directory.entities.User;
 import com.selenaguillen.directory.service.ServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@Profile("prod")
 @RequestMapping("/api")
 public class MainController {
     @Autowired

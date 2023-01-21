@@ -24,6 +24,10 @@ class ServiceLayerTest {
         List<User> developers = service.findByProfession("developer");
 
         assertEquals(191, developers.size(), "There should be 191 developers.");
+
+        for (User user: developers) {
+            assertTrue(user.getProfession().equalsIgnoreCase("developer"), "This list must only include developers.");
+        }
     }
 
     @Test
@@ -34,6 +38,11 @@ class ServiceLayerTest {
 
         assertEquals(40, usersInRange.size(), "There should be 40 users within this date range.");
 
+        for (User user: usersInRange) {
+            assertTrue(start.getTime() <= user.getDatecreated().getTime()
+                    && user.getDatecreated().getTime() <= end.getTime(), "The date for each user in this list should be within the established range.");
+        }
+
     }
 
     @Test
@@ -41,5 +50,9 @@ class ServiceLayerTest {
         List<User> usersFromItaly = service.findByCountry("Italy");
 
         assertEquals(8, usersFromItaly.size(), "There should be 8 users from Italy");
+
+        for (User user: usersFromItaly) {
+            assertTrue(user.getCountry().equalsIgnoreCase("Italy"), "This list only contains users from Italy.");
+        }
     }
 }
