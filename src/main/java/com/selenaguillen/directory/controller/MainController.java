@@ -3,75 +3,75 @@ package com.selenaguillen.directory.controller;
 import com.selenaguillen.directory.entities.User;
 import com.selenaguillen.directory.service.ServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/api")
 public class MainController {
     @Autowired
     ServiceLayer service;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public String getAllUsers(Model model) {
+
         try {
             List<User> users = new ArrayList<>(service.findAll());
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            model.addAttribute("users", users);
+            return "users";
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return "error"; //return error page and type of error
         }
     }
+
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    public String getUserById(@PathVariable("id") int id, Model model) {
         try {
-            Optional<User> user = service.findById(id);
-            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+            User user = service.findById(id).get();
+            model.addAttribute("user", user);
+            return "user";
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return "error";
         }
-
     }
 
-
     @GetMapping("/users/profession/{profession}")
-    public ResponseEntity<List<User>> getByProfession(@PathVariable("profession") String profession) {
+    public String getByProfession(@PathVariable("profession") String profession, Model model) {
         try {
-            List<User> users = new ArrayList<>(service.findByProfession(profession));
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            List<User> users = service.findByProfession(profession);
+            model.addAttribute("users", users);
+            return "users-by-profession";
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return "error";
         }
     }
 
     @GetMapping("/users/date/{start}/{end}")
-    public ResponseEntity<List<User>> getByDateRange(@PathVariable("start") Date start, @PathVariable("end") Date end) {
+    public String getByDateRange(@PathVariable("start") Date start, @PathVariable("end") Date end, String profession, Model model) {
         try {
             List<User> users = service.findByDateRange(start, end);
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            model.addAttribute("users", users);
+            return "users-in-date-range";
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return "error";
         }
     }
 
     @GetMapping("/users/country/{country}")
-    public ResponseEntity<List<User>> getByCountry(@PathVariable("country") String country) {
+    public String getByCountry(@PathVariable("country") String country, Model model) {
         try {
             List<User> users = service.findByCountry(country);
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            model.addAttribute("users", users);
+            return "users-by-country";
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return "error";
         }
-
     }
 
 }
