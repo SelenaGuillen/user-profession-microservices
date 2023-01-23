@@ -16,6 +16,65 @@
       <h1>All Users</h1>
     </div>
   </div>
+  <div class="row m-4 border border-dark">
+    <div class="col-3 text-center m-3">
+      <span class="h3">Search</span>
+    </div>
+    <div class="col-7 text-center m-3">
+
+      <form action="users/search" method="GET">
+        <div class="form-group row">
+          <label for="id" class="col-3 col-form-label">
+            Id</label>
+          <div class="col-9">
+            <input type="text" name="id"
+                   id="id" class="form-control"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Get User</button>
+      </form>
+
+      <form action="users/search/profession" method="GET">
+        <div class="form-group row">
+          <label for="profession" class="col-3 col-form-label">
+            Profession</label>
+          <div class="col-9">
+            <input type="text" name="profession"
+                   id="profession" class="form-control"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Get User</button>
+      </form>
+
+      <form action="users/search/country" method="GET">
+        <div class="form-group row">
+          <label for="country" class="col-3 col-form-label">
+            Country</label>
+          <div class="col-9">
+            <input type="text" name="country"
+                   id="country" class="form-control"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Get User</button>
+      </form>
+
+      <form action="users/search/date" method="GET">
+        <div class="form-group row">
+          <label for="start" class="col-3 col-form-label">
+            Start</label>
+          <label for="end" class="col-3 col-form-label">
+            End</label>
+          <div class="col-9">
+            <input type="text" name="start"
+                   id="start" class="form-control"/>
+            <input type="text" name="end"
+                   id="end" class="form-control"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Get User</button>
+      </form>
+    </div>
+  </div>
 
   <div class="row m-4 border border-dark">
     <div class="col text-center m-3">
