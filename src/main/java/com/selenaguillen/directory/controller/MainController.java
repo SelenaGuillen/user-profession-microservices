@@ -18,7 +18,7 @@ public class MainController {
     @Autowired
     ServiceLayer service;
 
-    @GetMapping("/users")
+    @GetMapping("/users/all")
     public String getAllUsers(Model model) {
 
         try {
@@ -30,23 +30,12 @@ public class MainController {
         }
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/id")
     public String getUserById(@PathVariable("id") int id, Model model) {
         try {
             User user = service.findById(id).get();
             model.addAttribute("user", user);
             return "user";
-        } catch (Exception e) {
-            return "error";
-        }
-    }
-
-    @GetMapping("/users/profession/{profession}")
-    public String getByProfession(@PathVariable("profession") String profession, Model model) {
-        try {
-            List<User> users = service.findByProfession(profession);
-            model.addAttribute("users", users);
-            return "users-by-profession";
         } catch (Exception e) {
             return "error";
         }
@@ -74,24 +63,8 @@ public class MainController {
         }
     }
 
-    @GetMapping("/users/search/id")
-    public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
-        try {
-            if (id == 9999) {
-                return "redirect:/api/users";
-            }
-            else {
-                User user = service.findById(id).get();
-                model.addAttribute("user", user);
-                return "user";
-            }
-        } catch (Exception e) {
-            return "error";
-        }
-    }
-
-    @GetMapping("/users/search/profession")
-    public String searchByProfession(@RequestParam String profession, Model model) {
+    @GetMapping("/users/profession/{profession}")
+    public String getByProfession(@PathVariable(required = false, name="profession") String profession, Model model) {
         try {
             List<User> users = service.findByProfession(profession);
             model.addAttribute("users", users);
@@ -100,27 +73,12 @@ public class MainController {
             return "error";
         }
     }
-
-    @GetMapping("/users/search/country")
-    public String searchByCountry(@RequestParam String country, Model model) {
-        try {
-            List<User> users = service.findByCountry(country);
-            model.addAttribute("users", users);
-            return "users-by-country";
-        } catch (Exception e) {
-            return "error";
-        }
+    @GetMapping("search/profession")
+    public String searchById(@RequestParam(name="profession", defaultValue = "worker") String profession, Model model) {
+      List<User> users = service.findByProfession(profession);
+      model.addAttribute("users", users);
+      return "users-by-profession";
     }
 
-    @GetMapping("/users/search/date")
-    public String getUserByIdRequest(@RequestParam Date start, @RequestParam Date end, Model model) {
-        try {
-            List<User> users = service.findByDateRange(start, end);
-            model.addAttribute("users", users);
-            return "users-in-date-range";
-        } catch (Exception e) {
-            return "error";
-        }
-    }
 
 }
