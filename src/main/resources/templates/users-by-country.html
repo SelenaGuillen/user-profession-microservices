@@ -35,11 +35,11 @@
         <tbody>
         <tr th:each="user : ${users}">
           <td th:text="${user.id}">ID</td>
-          <td th:text="${user.firstname}">First Name</td>
-          <td th:text="${user.lastname}">Last Name</td>
+          <td th:text="${user.firstName}">First Name</td>
+          <td th:text="${user.lastName}">Last Name</td>
           <td th:text="${user.email}">Email</td>
           <td th:text="${user.profession}">Profession</td>
-          <td th:text="${user.datecreated}">Date Created</td>
+          <td th:text="${user.dateCreated}">Date Created</td>
           <td th:text="${user.country}">Country</td>
           <td th:text="${user.city}">City</td>
         </tr>

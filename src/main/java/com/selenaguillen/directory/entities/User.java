@@ -10,17 +10,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
-    @Column(nullable = false)
-    private String firstname;
+    @Column(name="first_name", nullable = false)
+    private String firstName;
 
-    @Column(nullable = false)
-    private String lastname;
+    @Column(name="last_name", nullable = false)
+    private String lastName;
     @Column
     private String email;
     @Column
     private String profession;
-    @Column(nullable = false)
-    private Date datecreated;
+    @Column(name="date_created", nullable = false)
+    private Date dateCreated;
     @Column
     private String country;
     @Column
@@ -28,13 +28,13 @@ public class User {
 
     public User() {}
 
-    public User(int id, String firstname, String lastname, String email, String profession, Date datecreated, String country, String city) {
+    public User(int id, String firstName, String lastName, String email, String profession, Date dateCreated, String country, String city) {
         this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.profession = profession;
-        this.datecreated =datecreated;
+        this.dateCreated =dateCreated;
         this.country = country;
         this.city = city;
     }
@@ -46,20 +46,20 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -78,12 +78,12 @@ public class User {
         this.profession = profession;
     }
 
-    public Date getDatecreated() {
-        return datecreated;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDatecreated(Date datecreated) {
-        this.datecreated = datecreated;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getCountry() {
@@ -110,11 +110,11 @@ public class User {
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (!firstname.equals(user.firstname)) return false;
-        if (!lastname.equals(user.lastname)) return false;
+        if (!firstName.equals(user.firstName)) return false;
+        if (!lastName.equals(user.lastName)) return false;
         if (!Objects.equals(email, user.email)) return false;
         if (!Objects.equals(profession, user.profession)) return false;
-        if (!datecreated.equals(user.datecreated)) return false;
+        if (!dateCreated.equals(user.dateCreated)) return false;
         if (!Objects.equals(country, user.country)) return false;
         return Objects.equals(city, user.city);
     }
@@ -122,11 +122,11 @@ public class User {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + firstname.hashCode();
-        result = 31 * result + lastname.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (profession != null ? profession.hashCode() : 0);
-        result = 31 * result + datecreated.hashCode();
+        result = 31 * result + dateCreated.hashCode();
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         return result;
