@@ -18,7 +18,7 @@ public class MainController {
     @Autowired
     ServiceLayer service;
 
-    @GetMapping("/users/all")
+    @GetMapping("/users")
     public String getAllUsers(Model model) {
 
         try {
@@ -30,7 +30,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("/id")
+    @GetMapping("users/{id}")
     public String getUserById(@PathVariable("id") int id, Model model) {
         try {
             User user = service.findById(id).get();
@@ -72,6 +72,12 @@ public class MainController {
         } catch (Exception e) {
             return "error";
         }
+    }
+    @GetMapping("/users/id")
+    public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
+        User user = service.findById(id).get();
+        model.addAttribute("user", user);
+        return "user";
     }
     @GetMapping("search/profession")
     public String searchById(@RequestParam(name="profession", defaultValue = "worker") String profession, Model model) {

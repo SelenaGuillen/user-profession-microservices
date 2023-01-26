@@ -23,7 +23,7 @@
     </div>
     <div class="col-7 text-center m-3">
 
-      <form action="id" method="GET">
+      <form action="users/id" method="GET">
         <div class="form-group d-flex flex-row">
           <div class="p-2">
             <input type="text" name="id" id="id" field="*{id}" class="form-control" placeholder="Enter ID"/>
@@ -33,19 +33,9 @@
           </div>
         </div>
       </form>
-<!--      <form th:action="@{/users/__${id}__" method="GET">-->
-<!--        <div class="form-group d-flex flex-row">-->
-<!--          <div class="p-2">-->
-<!--            <input type="text" name="id" id="id" class="form-control" placeholder="Enter ID"/>-->
-<!--          </div>-->
-<!--          <div class="p-2">-->
-<!--            <button type="submit"  class="btn btn-outline-primary">search</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </form>-->
 
       <div class="row">
-        <form th:action="@{profession/developer}" method="GET">
+        <form th:action="@{users/profession/developer}" method="GET">
           <div class="form-group d-flex flex-row">
             <div class="p-2">
               <button type="submit" class="btn btn-outline-primary">View Developers</button>
@@ -53,7 +43,7 @@
           </div>
         </form>
 
-        <form th:action="@{profession/doctor}" method="GET">
+        <form th:action="@{users/profession/doctor}" method="GET">
           <div class="form-group d-flex flex-row">
             <div class="p-2">
               <button type="submit" class="btn btn-outline-primary">View Doctors</button>
@@ -61,7 +51,7 @@
           </div>
         </form>
 
-        <form th:action="@{profession/worker}" method="GET">
+        <form th:action="@{users/profession/worker}" method="GET">
           <div class="form-group d-flex flex-row">
             <div class="p-2">
               <button type="submit" class="btn btn-outline-primary">View Workers</button>
@@ -69,7 +59,7 @@
           </div>
         </form>
 
-        <form th:action="@{profession/police officer}" method="GET">
+        <form th:action="@{users/profession/police officer}" method="GET">
           <div class="form-group d-flex flex-row">
             <div class="p-2">
               <button type="submit" class="btn btn-outline-primary">View Police Officers</button>
@@ -77,7 +67,7 @@
           </div>
         </form>
 
-        <form th:action="@{profession/firefighter}" method="GET">
+        <form th:action="@{users/profession/firefighter}" method="GET">
           <div class="form-group d-flex flex-row">
             <div class="p-2">
               <button type="submit" class="btn btn-outline-primary">View Firefighters</button>
