@@ -23,6 +23,18 @@
     </div>
     <div class="col-7 text-center m-3">
 
+<!--      //TODO:IDEA: make a form w/ options to select profession and country, submit form and filter like that,-->
+<!--      add the ability to sort and filter by date range on every page. filter the current list (find a way to grab this list)-->
+      <select name="professions">
+        <option value="">Select Profession</option>
+        <option th:each="profession : ${professions}" th:text="${profession}"></option>
+      </select>
+
+      <select name="countries">
+        <option value="">Select Country</option>
+        <option th:each="country : ${countries}" th:text="${country}"></option>
+      </select>
+
       <form action="users/id" method="GET">
         <div class="form-group d-flex flex-row">
           <div class="p-2">

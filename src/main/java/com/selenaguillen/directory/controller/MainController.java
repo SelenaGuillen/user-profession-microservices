@@ -7,18 +7,37 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-
+//TODO: possible implementation: keep track of current list to make it more efficient to filter through, make filters toggleable
+//TODO: add remove and create pages & functionality
 @Controller
 @RequestMapping("/api")
 public class MainController {
     @Autowired
     ServiceLayer service;
+    Set<String> professions;
+    Set<String> countries;
+    @ModelAttribute
+    public void preLoad(Model model){
+        professions = new HashSet<>();
+        List<User> users = service.findAll();
+
+        for(User user: users) {
+            professions.add(user.getProfession());
+        }
+
+        countries = new HashSet<>();
+
+        for(User user: users) {
+            countries.add(user.getCountry());
+        }
+    }
 
     @GetMapping("/users")
     public String getAllUsers(Model model) {
@@ -26,6 +45,8 @@ public class MainController {
         try {
             List<User> users = new ArrayList<>(service.findAll());
             model.addAttribute("users", users);
+            model.addAttribute("professions", professions);
+            model.addAttribute("countries", countries);
             return "users";
         } catch (Exception e) {
             return "error"; //return error page and type of error
@@ -105,7 +126,7 @@ public class MainController {
         return "users-by-profession";
     }
 
-    //SORT BY DATE
+    //TODO: this should be able to be accomplish on every page after being filtered
     @GetMapping("/users/sort")
     public String searchByDocAndDev(Model model) {
 
@@ -114,7 +135,6 @@ public class MainController {
         model.addAttribute("users", users);
         return "users";
     }
-
 
 
 }
