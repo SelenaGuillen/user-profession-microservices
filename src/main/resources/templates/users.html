@@ -35,6 +35,18 @@
         <option th:each="country : ${countries}" th:text="${country}"></option>
       </select>
 
+      <form action="users/date" method="GET">
+        <div class="form-group d-flex flex-row">
+          <div class="p-2">
+            <input type="text" name="start" id="start" field="*{start}" class="form-control" placeholder="Enter Start Date"/>
+            <input type="text" name="end" id="end" field="*{end}" class="form-control" placeholder="Enter End Date"/>
+          </div>
+          <div class="p-2">
+            <button type="submit" class="btn btn-outline-primary">search</button>
+          </div>
+        </div>
+      </form>
+
       <form action="users/id" method="GET">
         <div class="form-group d-flex flex-row">
           <div class="p-2">
@@ -45,7 +57,7 @@
           </div>
         </div>
       </form>
-      
+
 
       <form th:action="@{users/search/onlydoctorsanddevs/doctor/developer}" method="GET">
         <div class="form-group d-flex flex-row">

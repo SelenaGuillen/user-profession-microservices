@@ -53,6 +53,7 @@ public class MainController {
         }
     }
 
+    //REQUIRED ENDPOINTS//
     @GetMapping("users/{id}")
     public String getUserById(@PathVariable("id") int id, Model model) {
         try {
@@ -97,6 +98,15 @@ public class MainController {
         }
     }
 
+    //REQUIRED ENDPOINTS W/ REQUESTPARAMS//
+
+    @GetMapping("/users/id")
+    public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
+        User user = service.findById(id).get();
+        model.addAttribute("user", user);
+        return "user";
+    }
+
     @GetMapping("/users/profession")
     public String dropDownProfession(@RequestParam(required = false, name="profession") String profession, Model model) {
         try {
@@ -118,19 +128,17 @@ public class MainController {
             return "error";
         }
     }
-    @GetMapping("/users/id")
-    public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
-        User user = service.findById(id).get();
-        model.addAttribute("user", user);
-        return "user";
+    @GetMapping("/users/date")
+    public String filterByDateRange(@RequestParam("start") Date start,
+                                    @RequestParam("end") Date end, Model model) {
+        try {
+            List<User> users = service.findByDateRange(start, end);
+            model.addAttribute("users", users);
+            return "users-in-date-range";
+        } catch (Exception e) {
+            return "error";
+        }
     }
-    @GetMapping("search/profession")
-    public String searchById(@RequestParam(name="profession", defaultValue = "worker") String profession, Model model) {
-      List<User> users = service.findByProfession(profession);
-      model.addAttribute("users", users);
-      return "users-by-profession";
-    }
-
 
 
     //TEST FILTER AND SORT

@@ -12,7 +12,7 @@ import java.util.List;
 public interface ServiceLayer extends UserRepository {
       List<User> findByProfession(String profession);
       List<User> findByCountry(String country);
-      @Query(value="SELECT * FROM User WHERE dateCreated between :start AND :end", nativeQuery = true)
+      @Query(value="SELECT * FROM User WHERE date_created between :start AND :end", nativeQuery = true)
       List<User> findByDateRange(Date start, Date end);
 
       List<User> findAllByOrderByDateCreatedAsc();
