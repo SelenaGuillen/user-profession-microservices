@@ -96,6 +96,28 @@ public class MainController {
             return "error";
         }
     }
+
+    @GetMapping("/users/profession")
+    public String dropDownProfession(@RequestParam(required = false, name="profession") String profession, Model model) {
+        try {
+            List<User> users = service.findByProfession(profession);
+            model.addAttribute("users", users);
+            return "users-by-profession";
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
+    @GetMapping("/users/country")
+    public String dropDownCountry(@RequestParam(required = false, name="country") String country, Model model) {
+        try {
+            List<User> users = service.findByCountry(country);
+            model.addAttribute("users", users);
+            return "users-by-country";
+        } catch (Exception e) {
+            return "error";
+        }
+    }
     @GetMapping("/users/id")
     public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
         User user = service.findById(id).get();

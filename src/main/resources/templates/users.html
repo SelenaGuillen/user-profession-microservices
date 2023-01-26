@@ -25,12 +25,12 @@
 
 <!--      //TODO:IDEA: make a form w/ options to select profession and country, submit form and filter like that,-->
 <!--      add the ability to sort and filter by date range on every page. filter the current list (find a way to grab this list)-->
-      <select name="professions">
+      <select th:onchange="'window.location.href = \'' + @{users/profession} + '?profession=\' + this.value ' " name="profession">
         <option value="">Select Profession</option>
         <option th:each="profession : ${professions}" th:text="${profession}"></option>
       </select>
 
-      <select name="countries">
+      <select th:onchange="'window.location.href = \'' + @{users/country} + '?country=\' + this.value ' " name="country">
         <option value="">Select Country</option>
         <option th:each="country : ${countries}" th:text="${country}"></option>
       </select>
@@ -45,49 +45,7 @@
           </div>
         </div>
       </form>
-
-      <div class="row">
-        <form th:action="@{users/profession/developer}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Developers</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/doctor}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Doctors</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/worker}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Workers</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/police officer}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Police Officers</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/firefighter}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Firefighters</button>
-            </div>
-          </div>
-        </form>
-      </div>
-
+      
 
       <form th:action="@{users/search/onlydoctorsanddevs/doctor/developer}" method="GET">
         <div class="form-group d-flex flex-row">
