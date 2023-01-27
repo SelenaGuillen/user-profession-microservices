@@ -3,10 +3,13 @@ package com.selenaguillen.directory.controller;
 import com.selenaguillen.directory.entities.User;
 import com.selenaguillen.directory.service.ServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,12 +24,13 @@ import java.util.stream.Collectors;
 public class MainController {
     @Autowired
     ServiceLayer service;
+    List<User> users;
     Set<String> professions;
     Set<String> countries;
     @ModelAttribute
     public void preLoad(Model model){
         professions = new HashSet<>();
-        List<User> users = service.findAll();
+        users = service.findAll();
 
         for(User user: users) {
             professions.add(user.getProfession());
@@ -39,11 +43,23 @@ public class MainController {
         }
     }
 
+    @GetMapping("/hello")
+    public String hello() {
+        String message = "Hello AWS Elastic Beanstalk!";
+        try {
+            InetAddress ip = InetAddress.getLocalHost();
+            message += " From host: " + ip;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+
     @GetMapping("/users")
     public String getAllUsers(Model model) {
 
         try {
-            List<User> users = new ArrayList<>(service.findAll());
             model.addAttribute("users", users);
             model.addAttribute("professions", professions);
             model.addAttribute("countries", countries);
@@ -53,22 +69,21 @@ public class MainController {
         }
     }
 
-    //REQUIRED ENDPOINTS//
+//    REQUIRED ENDPOINTS//
     @GetMapping("users/{id}")
-    public String getUserById(@PathVariable("id") int id, Model model) {
-        try {
+    @ResponseBody
+    public User getUserById(@PathVariable("id") int id, Model model) {
             User user = service.findById(id).get();
             model.addAttribute("user", user);
-            return "user";
-        } catch (Exception e) {
-            return "error";
-        }
+            return user;
+
     }
+
 
     @GetMapping("/users/country/{country}")
     public String getByCountry(@PathVariable("country") String country, Model model) {
         try {
-            List<User> users = service.findByCountry(country);
+            users = service.findByCountry(country);
             model.addAttribute("users", users);
             return "users-by-country";
         } catch (Exception e) {
@@ -79,7 +94,7 @@ public class MainController {
     @GetMapping("/users/date/{start}/{end}")
     public String getByDateRange(@PathVariable("start") Date start, @PathVariable("end") Date end, Model model) {
         try {
-            List<User> users = service.findByDateRange(start, end);
+            users = service.findByDateRange(start, end);
             model.addAttribute("users", users);
             return "users-in-date-range";
         } catch (Exception e) {
@@ -90,7 +105,7 @@ public class MainController {
     @GetMapping("/users/profession/{profession}")
     public String getByProfession(@PathVariable(required = false, name="profession") String profession, Model model) {
         try {
-            List<User> users = service.findByProfession(profession);
+            users = service.findByProfession(profession);
             model.addAttribute("users", users);
             return "users-by-profession";
         } catch (Exception e) {
@@ -110,7 +125,7 @@ public class MainController {
     @GetMapping("/users/profession")
     public String dropDownProfession(@RequestParam(required = false, name="profession") String profession, Model model) {
         try {
-            List<User> users = service.findByProfession(profession);
+            users = service.findByProfession(profession);
             model.addAttribute("users", users);
             return "users-by-profession";
         } catch (Exception e) {
@@ -121,7 +136,7 @@ public class MainController {
     @GetMapping("/users/country")
     public String dropDownCountry(@RequestParam(required = false, name="country") String country, Model model) {
         try {
-            List<User> users = service.findByCountry(country);
+            users = service.findByCountry(country);
             model.addAttribute("users", users);
             return "users-by-country";
         } catch (Exception e) {
@@ -132,7 +147,7 @@ public class MainController {
     public String filterByDateRange(@RequestParam("start") Date start,
                                     @RequestParam("end") Date end, Model model) {
         try {
-            List<User> users = service.findByDateRange(start, end);
+            users = service.findByDateRange(start, end);
             model.addAttribute("users", users);
             return "users-in-date-range";
         } catch (Exception e) {
@@ -147,12 +162,12 @@ public class MainController {
     public String searchByDocAndDev(@PathVariable(required = false, name="profession") String profession,
                                     @PathVariable(required = false, name="profession1") String profession1,
                                     Model model) {
-        List<User> allUsers = service.findAll();
-        List<User> users = allUsers.stream()
+        users = service.findAll();
+        List<User> filteredUsers = users.stream()
                 .filter(user -> user.getProfession().equalsIgnoreCase(profession) || user.getProfession().equalsIgnoreCase(profession1))
                 .collect(Collectors.toList());
 
-        model.addAttribute("users", users);
+        model.addAttribute("users", filteredUsers);
         return "users-by-profession";
     }
 
@@ -160,7 +175,7 @@ public class MainController {
     @GetMapping("/users/sort")
     public String searchByDocAndDev(Model model) {
 
-        List<User> users = service.findAllByOrderByDateCreatedAsc();
+        users = service.findAllByOrderByDateCreatedAsc();
 
         model.addAttribute("users", users);
         return "users";

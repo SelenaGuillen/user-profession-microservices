@@ -2,6 +2,7 @@ package com.selenaguillen.directory.service;
 
 import com.selenaguillen.directory.entities.User;
 import com.selenaguillen.directory.repositories.UserRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
