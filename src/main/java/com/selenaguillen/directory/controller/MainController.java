@@ -3,15 +3,14 @@ package com.selenaguillen.directory.controller;
 import com.selenaguillen.directory.entities.User;
 import com.selenaguillen.directory.service.ServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,18 +42,6 @@ public class MainController {
         }
     }
 
-    @GetMapping("/hello")
-    public String hello() {
-        String message = "Hello AWS Elastic Beanstalk!";
-        try {
-            InetAddress ip = InetAddress.getLocalHost();
-            message += " From host: " + ip;
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return message;
-    }
-
 
     @GetMapping("/users")
     public String getAllUsers(Model model) {
@@ -65,67 +52,83 @@ public class MainController {
             model.addAttribute("countries", countries);
             return "users";
         } catch (Exception e) {
-            return "error"; //return error page and type of error
+            return "error";
         }
     }
 
-//    REQUIRED ENDPOINTS//
+//    REQUIRED ENDPOINTS w/ ResponseBody and status codes
     @GetMapping("users/{id}")
-    @ResponseBody
-    public User getUserById(@PathVariable("id") int id, Model model) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+        try {
             User user = service.findById(id).get();
-            model.addAttribute("user", user);
-            return user;
-
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-
     @GetMapping("/users/country/{country}")
-    public String getByCountry(@PathVariable("country") String country, Model model) {
+    public ResponseEntity<List<User>> getUsersByCountry(@PathVariable("country") String country) {
         try {
             users = service.findByCountry(country);
-            model.addAttribute("users", users);
-            return "users-by-country";
+            if (users.size() == 0) {
+                throw new Exception();
+            }
+            return ResponseEntity.ok(users);
         } catch (Exception e) {
-            return "error";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/users/date/{start}/{end}")
-    public String getByDateRange(@PathVariable("start") Date start, @PathVariable("end") Date end, Model model) {
+    public ResponseEntity<List<User>> getUsersByDateRange(@PathVariable("start") Date start, @PathVariable("end") Date end) {
         try {
+            if (end.before(start)) {
+                throw new Exception();
+            }
             users = service.findByDateRange(start, end);
-            model.addAttribute("users", users);
-            return "users-in-date-range";
+            return ResponseEntity.ok(users);
         } catch (Exception e) {
-            return "error";
+            //422 Unprocessable Entity response status code indicates that
+            // the server understands the content type of the request entity,
+            // and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
     @GetMapping("/users/profession/{profession}")
-    public String getByProfession(@PathVariable(required = false, name="profession") String profession, Model model) {
+    public ResponseEntity<List<User>> getUsersByProfession(@PathVariable(required = false, name="profession") String profession) {
         try {
             users = service.findByProfession(profession);
-            model.addAttribute("users", users);
-            return "users-by-profession";
+            if (users.size() == 0) {
+                throw new Exception();
+            }
+            return ResponseEntity.ok(users);
         } catch (Exception e) {
-            return "error";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    //REQUIRED ENDPOINTS W/ REQUESTPARAMS//
-
+    //REQUIRED ENDPOINTS W/ REQUESTPARAMS that return html pages
     @GetMapping("/users/id")
     public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
-        User user = service.findById(id).get();
-        model.addAttribute("user", user);
-        return "user";
+        try {
+            User user = service.findById(id).get();
+            model.addAttribute("user", user);
+            return "user";
+        } catch (Exception e) {
+            return "error";
+        }
+
     }
 
     @GetMapping("/users/profession")
     public String dropDownProfession(@RequestParam(required = false, name="profession") String profession, Model model) {
         try {
             users = service.findByProfession(profession);
+            if (users.size() == 0) {
+                throw new Exception();
+            }
             model.addAttribute("users", users);
             return "users-by-profession";
         } catch (Exception e) {
@@ -137,6 +140,9 @@ public class MainController {
     public String dropDownCountry(@RequestParam(required = false, name="country") String country, Model model) {
         try {
             users = service.findByCountry(country);
+            if (users.size() == 0) {
+                throw new Exception();
+            }
             model.addAttribute("users", users);
             return "users-by-country";
         } catch (Exception e) {
@@ -145,13 +151,17 @@ public class MainController {
     }
     @GetMapping("/users/date")
     public String filterByDateRange(@RequestParam("start") Date start,
-                                    @RequestParam("end") Date end, Model model) {
+                                    @RequestParam("end") Date end, Model model)
+    {
         try {
+            if (end.before(start)) {
+                throw new Exception();
+            }
             users = service.findByDateRange(start, end);
             model.addAttribute("users", users);
             return "users-in-date-range";
         } catch (Exception e) {
-            return "error";
+            return "invalid-date-range";
         }
     }
 
@@ -171,7 +181,6 @@ public class MainController {
         return "users-by-profession";
     }
 
-    //TODO: this should be able to be accomplish on every page after being filtered
     @GetMapping("/users/sort")
     public String searchByDocAndDev(Model model) {
 
