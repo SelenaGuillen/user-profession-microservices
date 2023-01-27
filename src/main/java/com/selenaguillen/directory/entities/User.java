@@ -1,6 +1,5 @@
 package com.selenaguillen.directory.entities;
 
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;

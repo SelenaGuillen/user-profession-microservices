@@ -15,6 +15,8 @@ public interface ServiceLayer extends UserRepository {
       List<User> findByCountry(String country);
       @Query(value="SELECT * FROM User WHERE date_created between :start AND :end", nativeQuery = true)
       List<User> findByDateRange(Date start, Date end);
-
+      List<User> findAllByOrderByFirstNameAsc();
+      List<User> findAllByOrderByLastNameAsc();
       List<User> findAllByOrderByDateCreatedAsc();
+      List<User> findAllByOrderByDateCreatedDesc();
 }

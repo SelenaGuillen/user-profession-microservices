@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 //TODO: possible implementation: keep track of current list to make it more efficient to filter through, make filters toggleable
 //TODO: add remove and create pages & functionality
@@ -26,6 +26,7 @@ public class MainController {
     List<User> users;
     Set<String> professions;
     Set<String> countries;
+    List<String> sortingMethods;
     @ModelAttribute
     public void preLoad(Model model){
         professions = new HashSet<>();
@@ -40,6 +41,13 @@ public class MainController {
         for(User user: users) {
             countries.add(user.getCountry());
         }
+
+        sortingMethods = new ArrayList<>();
+        sortingMethods.add("First Name");
+        sortingMethods.add("Last Name");
+        sortingMethods.add("Date - Ascending");
+        sortingMethods.add("Date - Descending");
+        sortingMethods.add("ID");
     }
 
 
@@ -50,6 +58,7 @@ public class MainController {
             model.addAttribute("users", users);
             model.addAttribute("professions", professions);
             model.addAttribute("countries", countries);
+            model.addAttribute("sortingMethods", sortingMethods);
             return "users";
         } catch (Exception e) {
             return "error";
@@ -109,7 +118,7 @@ public class MainController {
         }
     }
 
-    //REQUIRED ENDPOINTS W/ REQUESTPARAMS that return html pages
+    //REQUIRED ENDPOINTS W/ REQUEST PARAMS FOR UI//
     @GetMapping("/users/id")
     public String searchById(@RequestParam(name="id", defaultValue = "9999") int id, Model model) {
         try {
@@ -149,6 +158,35 @@ public class MainController {
             return "error";
         }
     }
+
+    //SORTING METHODS//
+    //TODO: GET /users?sort_by=asc(date) and GET /users?sort_by=desc(date) use this format
+    @GetMapping("/users/sort/date/asc")
+    public String sortByDateAsc(Model model) {
+            users = service.findAllByOrderByDateCreatedAsc();
+            model.addAttribute("users", users);
+            return "sorted-users";
+    }
+
+    @GetMapping("/users/sort/date/desc")
+    public String sortByDateDesc(Model model) {
+        users = service.findAllByOrderByDateCreatedDesc();
+        model.addAttribute("users", users);
+        return "sorted-users";
+    }
+
+    @GetMapping("/users/sort/name/first")
+    public String sortByFirstName(Model model) {
+        users = service.findAllByOrderByFirstNameAsc();
+        model.addAttribute("users", users);
+        return "sorted-users";
+    }
+    @GetMapping("/users/sort/name/last")
+    public String sortByLastName(Model model) {
+        users = service.findAllByOrderByLastNameAsc();
+        model.addAttribute("users", users);
+        return "sorted-users";
+    }
     @GetMapping("/users/date")
     public String filterByDateRange(@RequestParam("start") Date start,
                                     @RequestParam("end") Date end, Model model)
@@ -164,31 +202,5 @@ public class MainController {
             return "invalid-date-range";
         }
     }
-
-
-    //TEST FILTER AND SORT
-
-    @GetMapping("/users/search/onlydoctorsanddevs/{profession}/{profession1}")
-    public String searchByDocAndDev(@PathVariable(required = false, name="profession") String profession,
-                                    @PathVariable(required = false, name="profession1") String profession1,
-                                    Model model) {
-        users = service.findAll();
-        List<User> filteredUsers = users.stream()
-                .filter(user -> user.getProfession().equalsIgnoreCase(profession) || user.getProfession().equalsIgnoreCase(profession1))
-                .collect(Collectors.toList());
-
-        model.addAttribute("users", filteredUsers);
-        return "users-by-profession";
-    }
-
-    @GetMapping("/users/sort")
-    public String searchByDocAndDev(Model model) {
-
-        users = service.findAllByOrderByDateCreatedAsc();
-
-        model.addAttribute("users", users);
-        return "users";
-    }
-
 
 }

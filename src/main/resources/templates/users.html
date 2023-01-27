@@ -22,7 +22,7 @@
   </div>
 
   <div class="row m-4">
-    <div class="col border border-dark"><br>
+    <div class="col border border-dark text-center"><br>
       <span class="h3 text-center">Search</span><br><br>
       <!--      Search By ID-->
       <div class="row">
@@ -69,20 +69,57 @@
             </select>
           </div>
         </div>
-      </div>
 
-<!--      Test Area-->
-<!--      <form th:action="@{users/search/onlydoctorsanddevs/doctor/developer}" method="GET">-->
-<!--        <div class="form-group d-flex flex-row">-->
-<!--          <div class="p-2">-->
-<!--            <button type="submit" class="btn btn-outline-primary">Current Test</button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </form>-->
+      </div>
+      <div class="col">
+    </div>
     </div>
 
   </div>
 
+<!--  Sorting Buttons-->
+
+  <div class="justify-content-center row m-4 border border-dark">
+    <div>
+      <form th:action="@{users/sort/date/asc}" method="GET">
+        <div class="form-group d-flex flex-row">
+          <div class="p-2">
+            <button type="submit" class="btn btn-outline-primary">Sort By Date - Asc</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div>
+      <form th:action="@{users/sort/date/desc}" method="GET">
+        <div class="form-group d-flex flex-row">
+          <div class="p-2">
+            <button type="submit" class="btn btn-outline-primary">Sort By Date - Desc</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div>
+      <form th:action="@{users/sort/name/first}" method="GET">
+        <div class="form-group d-flex flex-row">
+          <div class="p-2">
+            <button type="submit" class="btn btn-outline-primary">Sort By First Name</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div>
+      <form th:action="@{users/sort/name/last}" method="GET">
+        <div class="form-group d-flex flex-row">
+          <div class="p-2">
+            <button type="submit" class="btn btn-outline-primary">Sort By Last Name</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+<!--  Data Table-->
   <div class="row m-4 border border-dark">
     <div class="col text-center m-3">
       <table class="table table-striped">
