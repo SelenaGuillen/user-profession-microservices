@@ -12,39 +12,8 @@
 
 <div class="container">
   <div class="row m-4">
-    <div class="col text-center border border-dark">
-      <h1>Filtered Users</h1>
-    </div>
-  </div>
-
-  <div class="row m-4 border border-dark">
-    <div class="col text-center m-3">
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Profession</th>
-          <th>Date Created</th>
-          <th>Country</th>
-          <th>City</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user : ${users}">
-          <td th:text="${user.id}">ID</td>
-          <td th:text="${user.firstName}">First Name</td>
-          <td th:text="${user.lastName}">Last Name</td>
-          <td th:text="${user.email}">Email</td>
-          <td th:text="${user.profession}">Profession</td>
-          <td th:text="${user.dateCreated}">Date Created</td>
-          <td th:text="${user.country}">Country</td>
-          <td th:text="${user.city}">City</td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="col text-center">
+      <h1 class="text-dark">Error: Invalid Date Range</h1>
     </div>
   </div>
 </div>

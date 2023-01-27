@@ -2,6 +2,7 @@ package com.selenaguillen.directory.service;
 
 import com.selenaguillen.directory.entities.User;
 import com.selenaguillen.directory.repositories.UserRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public interface ServiceLayer extends UserRepository {
       List<User> findByProfession(String profession);
       List<User> findByCountry(String country);
-      @Query(value="SELECT * FROM User WHERE dateCreated between :start AND :end", nativeQuery = true)
+      @Query(value="SELECT * FROM User WHERE date_created between :start AND :end", nativeQuery = true)
       List<User> findByDateRange(Date start, Date end);
+
+      List<User> findAllByOrderByDateCreatedAsc();
 }

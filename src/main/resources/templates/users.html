@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <style type="text/css">
+<!--styling here for now-->
+  </style>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -11,74 +14,73 @@
 <body>
 
 <div class="container">
+
   <div class="row m-4">
     <div class="col text-center border border-dark">
       <h1>All Users</h1>
     </div>
   </div>
 
-  <div class="row m-4 border border-dark">
-    <div class="col-3 text-center m-3">
-      <span class="h3">Search</span>
-    </div>
-    <div class="col-7 text-center m-3">
+  <div class="row m-4">
+    <div class="col border border-dark"><br>
+      <span class="h3 text-center">Search</span><br><br>
+      <!--      Search By ID-->
+      <div class="row">
+        <div class="col">
+          <form action="users/id" method="GET">
+            <div class="form-group d-flex">
+              <div class="p-2">
+                <input type="text" name="id" id="id" field="*{id}" class="form-control" placeholder="Enter ID"/>
+              </div>
+              <div class="p-2">
+                <button type="submit" class="btn btn-outline-primary">search</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--      Search By Date Range-->
+        <div class="col">
+          <form action="users/date" method="GET">
+            <div class="form-group d-flex flex-row">
+              <div class="p-2">
+                <input type="text" name="start" id="start" field="*{start}" class="form-control" placeholder="Enter Start Date"/>
+                <br>
+                <input type="text" name="end" id="end" field="*{end}" class="form-control" placeholder="Enter End Date"/>
+              </div>
+              <div class="p-2">
+                <button type="submit" class="btn btn-outline-primary">search</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--      Search By Profession and By Country-->
+        <div class="col">
+            <div class="custom-select-lg">
+              <select data-style="btn-primary" class="selectpicker show-tick" th:onchange="'window.location.href = \'' + @{users/profession} + '?profession=\' + this.value ' " name="profession">
+                <option value="">Select Profession</option>
+                <option th:each="profession : ${professions}" th:text="${profession}"></option>
+              </select>
+            </div>
 
-      <form action="users/id" method="GET">
-        <div class="form-group d-flex flex-row">
-          <div class="p-2">
-            <input type="text" name="id" id="id" field="*{id}" class="form-control" placeholder="Enter ID"/>
-          </div>
-          <div class="p-2">
-            <button type="submit" class="btn btn-outline-primary">search</button>
+          <div class="custom-select-lg">
+            <select th:onchange="'window.location.href = \'' + @{users/country} + '?country=\' + this.value ' " name="country">
+              <option value="">Select Country</option>
+              <option th:each="country : ${countries}" th:text="${country}"></option>
+            </select>
           </div>
         </div>
-      </form>
-
-      <div class="row">
-        <form th:action="@{users/profession/developer}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Developers</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/doctor}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Doctors</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/worker}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Workers</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/police officer}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Police Officers</button>
-            </div>
-          </div>
-        </form>
-
-        <form th:action="@{users/profession/firefighter}" method="GET">
-          <div class="form-group d-flex flex-row">
-            <div class="p-2">
-              <button type="submit" class="btn btn-outline-primary">View Firefighters</button>
-            </div>
-          </div>
-        </form>
       </div>
 
-
-
+<!--      Test Area-->
+<!--      <form th:action="@{users/search/onlydoctorsanddevs/doctor/developer}" method="GET">-->
+<!--        <div class="form-group d-flex flex-row">-->
+<!--          <div class="p-2">-->
+<!--            <button type="submit" class="btn btn-outline-primary">Current Test</button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
     </div>
+
   </div>
 
   <div class="row m-4 border border-dark">
@@ -99,11 +101,11 @@
         <tbody>
         <tr th:each="user : ${users}">
           <td th:text="${user.id}">ID</td>
-          <td th:text="${user.firstname}">First Name</td>
-          <td th:text="${user.lastname}">Last Name</td>
+          <td th:text="${user.firstName}">First Name</td>
+          <td th:text="${user.lastName}">Last Name</td>
           <td th:text="${user.email}">Email</td>
           <td th:text="${user.profession}">Profession</td>
-          <td th:text="${user.datecreated}">Date Created</td>
+          <td th:text="${user.dateCreated}">Date Created</td>
           <td th:text="${user.country}">Country</td>
           <td th:text="${user.city}">City</td>
         </tr>
@@ -112,6 +114,10 @@
     </div>
   </div>
 </div>
+</div>
+
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

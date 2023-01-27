@@ -39,8 +39,8 @@ class ServiceLayerTest {
         assertEquals(40, usersInRange.size(), "There should be 40 users within this date range.");
 
         for (User user: usersInRange) {
-            assertTrue(start.getTime() <= user.getDatecreated().getTime()
-                    && user.getDatecreated().getTime() <= end.getTime(), "The date for each user in this list should be within the established range.");
+            assertTrue(start.getTime() <= user.getDateCreated().getTime()
+                    && user.getDateCreated().getTime() <= end.getTime(), "The date for each user in this list should be within the established range.");
         }
 
     }
