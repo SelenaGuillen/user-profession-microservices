@@ -1,10 +1,10 @@
 # Mag Mutual User Professions Microservices
 ## Table of Contents
-* [UI Screenshots](#UI-Screenshots)
-* [API Documentation](#API-Documentation)
-* [Postman Tests for Required Endpoints](Postman-Tests-for-Required-Endpoints)
-* [AWS RDS Database](#AWS-RDS-Database)
-* [Final Thoughts](#Final-Thoughts)
+* [UI Screenshots](#ui-screenshots)
+* [API Documentation](#api-documentation)
+* [Postman Tests](#postman-tests)
+* [AWS RDS Database](#aws-rds-database)
+* [Final Thoughts](#final-thoughts)
 
 # AWS Elastic Beanstalk Link
 Go to [Home Page](http://professions-env-2.eba-wppceaet.us-east-2.elasticbeanstalk.com/api/users).
@@ -66,7 +66,7 @@ All sort pages use the same template. This is an example of sorting by first nam
 * GET user sort by first name: ```/users/sort/name/first```
 * GET user sort by last name: ```/users/sort/name/last```
 
-# Postman Tests for Required Endpoints
+# Postman Tests
 ## AWS Elastic Beanstalk
 ###### GET ```http://professions-env-2.eba-wppceaet.us-east-2.elasticbeanstalk.com/api/users/122```
 ![image](https://user-images.githubusercontent.com/31986528/215146126-2e5efbe2-2d77-4f9c-a736-4d7640f16c60.png)
