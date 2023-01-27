@@ -66,7 +66,7 @@ public class MainController {
     }
 
 //    REQUIRED ENDPOINTS w/ ResponseBody and status codes
-    @GetMapping("users/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
         try {
             User user = service.findById(id).get();
@@ -95,6 +95,7 @@ public class MainController {
             if (end.before(start)) {
                 throw new Exception();
             }
+            //FIX DATE FORMAT
             users = service.findByDateRange(start, end);
             return ResponseEntity.ok(users);
         } catch (Exception e) {
@@ -131,20 +132,6 @@ public class MainController {
 
     }
 
-    @GetMapping("/users/profession")
-    public String dropDownProfession(@RequestParam(required = false, name="profession") String profession, Model model) {
-        try {
-            users = service.findByProfession(profession);
-            if (users.size() == 0) {
-                throw new Exception();
-            }
-            model.addAttribute("users", users);
-            return "users-by-profession";
-        } catch (Exception e) {
-            return "error";
-        }
-    }
-
     @GetMapping("/users/country")
     public String dropDownCountry(@RequestParam(required = false, name="country") String country, Model model) {
         try {
@@ -154,6 +141,36 @@ public class MainController {
             }
             model.addAttribute("users", users);
             return "users-by-country";
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
+    @GetMapping("/users/date")
+    public String filterByDateRange(@RequestParam("start") Date start,
+                                    @RequestParam("end") Date end, Model model)
+    {
+        try {
+            if (end.before(start)) {
+                throw new Exception();
+            }
+            users = service.findByDateRange(start, end);
+            model.addAttribute("users", users);
+            return "users-in-date-range";
+        } catch (Exception e) {
+            return "invalid-date-range";
+        }
+    }
+
+    @GetMapping("/users/profession")
+    public String dropDownProfession(@RequestParam(required = false, name="profession") String profession, Model model) {
+        try {
+            users = service.findByProfession(profession);
+            if (users.size() == 0) {
+                throw new Exception();
+            }
+            model.addAttribute("users", users);
+            return "users-by-profession";
         } catch (Exception e) {
             return "error";
         }
@@ -186,21 +203,6 @@ public class MainController {
         users = service.findAllByOrderByLastNameAsc();
         model.addAttribute("users", users);
         return "sorted-users";
-    }
-    @GetMapping("/users/date")
-    public String filterByDateRange(@RequestParam("start") Date start,
-                                    @RequestParam("end") Date end, Model model)
-    {
-        try {
-            if (end.before(start)) {
-                throw new Exception();
-            }
-            users = service.findByDateRange(start, end);
-            model.addAttribute("users", users);
-            return "users-in-date-range";
-        } catch (Exception e) {
-            return "invalid-date-range";
-        }
     }
 
 }
