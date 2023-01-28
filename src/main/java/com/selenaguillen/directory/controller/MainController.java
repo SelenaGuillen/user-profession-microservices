@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 //TODO: possible implementation: keep track of current list to make it more efficient to filter through, make filters toggleable
 //TODO: add remove and create pages & functionality
@@ -26,7 +26,7 @@ public class MainController {
     List<User> users;
     Set<String> professions;
     Set<String> countries;
-    List<String> sortingMethods;
+
     @ModelAttribute
     public void preLoad(Model model){
         professions = new HashSet<>();
@@ -41,13 +41,6 @@ public class MainController {
         for(User user: users) {
             countries.add(user.getCountry());
         }
-
-        sortingMethods = new ArrayList<>();
-        sortingMethods.add("First Name");
-        sortingMethods.add("Last Name");
-        sortingMethods.add("Date - Ascending");
-        sortingMethods.add("Date - Descending");
-        sortingMethods.add("ID");
     }
 
 
@@ -58,7 +51,6 @@ public class MainController {
             model.addAttribute("users", users);
             model.addAttribute("professions", professions);
             model.addAttribute("countries", countries);
-            model.addAttribute("sortingMethods", sortingMethods);
             return "users";
         } catch (Exception e) {
             return "error";
@@ -68,12 +60,16 @@ public class MainController {
 //    REQUIRED ENDPOINTS w/ ResponseBody and status codes
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+        User user = service.findById(id).get();
         try {
-            User user = service.findById(id).get();
-            return ResponseEntity.ok(user);
+            //These two fields cannot be empty b/c of the non-nullable property so testing here if user is empty
+            if (user.getFirstName().isEmpty() || user.getLastName().isEmpty()) {
+                throw new Exception();
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/users/country/{country}")
@@ -83,10 +79,10 @@ public class MainController {
             if (users.size() == 0) {
                 throw new Exception();
             }
-            return ResponseEntity.ok(users);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/users/date/{start}/{end}")
@@ -97,13 +93,14 @@ public class MainController {
             }
             //FIX DATE FORMAT
             users = service.findByDateRange(start, end);
-            return ResponseEntity.ok(users);
         } catch (Exception e) {
             //422 Unprocessable Entity response status code indicates that
             // the server understands the content type of the request entity,
             // and the syntax of the request entity is correct, but it was unable to process the contained instructions.
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
+        return ResponseEntity.ok(users);
+
     }
 
     @GetMapping("/users/profession/{profession}")
@@ -113,10 +110,10 @@ public class MainController {
             if (users.size() == 0) {
                 throw new Exception();
             }
-            return ResponseEntity.ok(users);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(users, HttpStatus.NOT_FOUND);
         }
+        return ResponseEntity.ok(users);
     }
 
     //REQUIRED ENDPOINTS W/ REQUEST PARAMS FOR UI//
@@ -132,6 +129,7 @@ public class MainController {
 
     }
 
+    //w/ user, on't retrune new except
     @GetMapping("/users/country")
     public String dropDownCountry(@RequestParam(required = false, name="country") String country, Model model) {
         try {
